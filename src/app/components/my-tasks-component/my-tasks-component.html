@@ -1,0 +1,89 @@
+<div class="report-title">My Tasks</div>
+<div class="report-desc">Stay focused and get things done.</div>
+
+<mat-grid-list cols="3" rowHeight="120px" gutterSize="12px">
+    <mat-grid-tile class="mat-grid-tile-total">
+        <div>
+            <div class="summary-content">
+                <mat-icon>list</mat-icon>
+                <span class="summary-count">{{ totalTasks }}</span>
+            </div>
+            <div>Total Tasks</div>
+        </div>
+    </mat-grid-tile>
+
+    <mat-grid-tile class="mat-grid-tile-inprogress">
+        <div>
+            <div class="summary-content">
+                <mat-icon>play_circle</mat-icon>
+                <span class="summary-count">{{ inProgress }}</span>
+            </div>
+            <div>In Progress</div>
+        </div>
+    </mat-grid-tile>
+
+    <mat-grid-tile class="mat-grid-tile-completed">
+        <div>
+            <div class="summary-content">
+                <mat-icon>check</mat-icon>
+                <span class="summary-count">{{ completed }}</span>
+            </div>
+            <div>Completed</div>
+        </div>
+    </mat-grid-tile>
+</mat-grid-list>
+
+<div class="table-filters">
+  <button mat-raised-button>All</button>
+  <button mat-raised-button>Active</button>
+  <button mat-raised-button>Completed</button>
+
+  <span class="spacer"></span>
+
+  <div class="search-container">
+    <!-- <input matInput (keyup)="applyFilter($event)" placeholder="Search tasks..." #input> -->
+    <button mat-icon-button>
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
+
+  <button mat-raised-button>
+    <mat-icon>sort</mat-icon>
+    Sort by: Due date
+  </button>
+  <button mat-flat-button color="primary">Add Task</button>
+</div>
+
+
+
+
+
+
+
+<div class="task-row">
+    <mat-checkbox class="example-margin"></mat-checkbox>
+
+    <span class="task-main-info">
+        <span class="task-title">Review weekly report - title</span>
+        <span class="task-desc">something description</span>
+    </span>
+
+    <span>Learning</span>
+
+    <span>
+        <mat-icon>date_range</mat-icon>
+        Oct 20, 2026
+    </span>
+
+    <span>High</span>
+
+    <span>
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item>Edit</button>
+            <button mat-menu-item>Delete</button>
+        </mat-menu>
+    </span>
+</div>

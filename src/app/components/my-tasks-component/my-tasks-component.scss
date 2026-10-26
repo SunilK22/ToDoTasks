@@ -1,0 +1,77 @@
+.mat-grid-tile-total {
+    background: rgb(208, 220, 228);
+    border-radius: 8px;
+}
+
+.mat-grid-tile-inprogress {
+    background: rgb(219, 230, 220);
+    border-radius: 8px;
+}
+
+.mat-grid-tile-completed {
+    background: rgb(203, 231, 208);
+    border-radius: 8px;
+}
+
+.report-desc {
+    font-size: 14px;
+    color: #888;
+}
+
+.report-title {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.summary-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.summary-count {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.summary-content mat-icon {
+    font-size: 50px;
+    width: 50px;
+    height: 50px;
+}
+
+
+
+.task-row {
+    display: grid;
+    grid-template-columns: 40px 2fr 1fr 1fr 80px 40px;
+    align-items: center;
+    padding: 10px 16px;
+    background: white;
+    gap: 12px;
+}
+
+
+.task-main-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.task-desc {
+    font-size: 12px;
+    color: #888;
+
+    
+}
+
+
+.table-filters {
+  display: flex;
+  gap: 10px;
+  padding: 12px 18px;
+}
+
+.spacer {
+  flex: 1 1 auto; 
+}
+

@@ -1,0 +1,62 @@
+<form [formGroup]="tasksFormGroup" class="taskForm">
+    <div class="formHeader">
+        <span class="form-title">Create a task</span>
+        <button mat-icon-button>
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <div>
+        <div>Task title</div>
+        <mat-form-field>
+            <input #taskTitle formControlName="title" matInput placeholder="Enter task title">
+        </mat-form-field>
+    </div>
+
+
+    <div>
+        <div>Description</div>
+        <mat-form-field hint-label="Max 500 characters">
+            <textarea #input matInput formControlName="description" placeholder="Enter task description (optional)"
+                maxlength="500" [(ngModel)]="descValue"></textarea>
+            <mat-hint align="end">{{descValue().length}}/500</mat-hint>
+        </mat-form-field>
+    </div>
+
+
+    <div>
+        <div>Category</div>
+        <mat-form-field>
+            <mat-select placeholder="--select category--">
+                @for(data of taskCategory; track data){
+                <mat-option [value]= "data.title">
+                    <mat-icon>{{data.icon}}</mat-icon>
+                    {{data.title}}
+                </mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div>
+        <div>Priority</div>
+        <input type="radio" formControlName="priority" value="low"> Low
+        <input type="radio" formControlName="priority" value="medium"> Medium
+        <input type="radio" formControlName="priority" value="high"> High
+    </div>
+
+
+    <div class="form-date">
+        <div>Due date</div>
+        <mat-form-field>
+            <input matInput placeholder="Select date" [matDatepicker]="datepicker">
+            <mat-datepicker #datepicker />
+            <mat-datepicker-toggle [for]="datepicker" matSuffix />
+        </mat-form-field>
+    </div>
+
+    <div class="form-actions">
+        <button mat-raised-button>Cancel</button>
+        <button mat-flat-button color="primary">Save Task</button>
+    </div>
+</form>

@@ -1,0 +1,36 @@
+<mat-toolbar class="toolbar">
+    <button matIconButton type="button" (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <h1 class="app-title">To Do App</h1>
+
+    <span class="example-spacer"> </span>
+    <span class="todays-date">{{ todaysDate | date : 'fullDate'}}</span>
+</mat-toolbar>
+
+<mat-sidenav-container style="height: 100vh" class="example-sidenav-container">
+    <mat-sidenav #sidenav mode="side" [opened]="isOpened()">
+        <mat-nav-list>
+            <a mat-list-item>
+                <mat-icon>home</mat-icon>
+                My Tasks
+            </a>
+            <a mat-list-item>
+                <mat-icon>calendar_today</mat-icon>
+                Today
+            </a>
+            <a mat-list-item>
+                <mat-icon>access_time</mat-icon>
+                Upcoming
+            </a>
+            <a mat-list-item>
+                <mat-icon>check</mat-icon>
+                Completed
+            </a>
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <app-my-tasks-component></app-my-tasks-component>
+    </mat-sidenav-content>
+</mat-sidenav-container>
