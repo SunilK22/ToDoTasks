@@ -7,10 +7,8 @@ export interface ITodoTask {
     description?: string;
     category: TaskCategory;
     priority: TaskPriority;
-    dueDate?: string;       // ISO date string, e.g. 2026-10-22
+    dueDate?: string;       
     completed: boolean;
-    createdAt: string;      // ISO date-time
-    updatedAt: string;      // ISO date-time
 }
 
 export interface IGroupType{
