@@ -1,15 +1,16 @@
-<form [formGroup]="tasksFormGroup" class="taskForm">
+<form (ngSubmit)="saveForm()" [formGroup]="tasksFormGroup" class="taskForm">
     <div class="formHeader">
         <span class="form-title">Create a task</span>
-        <button mat-icon-button>
+        <button mat-icon-button (click)="closeForm()">
             <mat-icon>close</mat-icon>
         </button>
     </div>
 
     <div>
-        <div>Task title</div>
+        <div>Task Title</div>
         <mat-form-field>
             <input #taskTitle formControlName="title" matInput placeholder="Enter task title">
+            <mat-error>Task title is required</mat-error>
         </mat-form-field>
     </div>
 
@@ -27,36 +28,38 @@
     <div>
         <div>Category</div>
         <mat-form-field>
-            <mat-select placeholder="--select category--">
+            <mat-select formControlName="category" placeholder="--select category--">
                 @for(data of taskCategory; track data){
-                <mat-option [value]= "data.title">
+                <mat-option [value]="data.title">
                     <mat-icon>{{data.icon}}</mat-icon>
                     {{data.title}}
                 </mat-option>
                 }
             </mat-select>
+            <mat-error>Category is required</mat-error>
         </mat-form-field>
     </div>
 
     <div>
         <div>Priority</div>
-        <input type="radio" formControlName="priority" value="low"> Low
-        <input type="radio" formControlName="priority" value="medium"> Medium
-        <input type="radio" formControlName="priority" value="high"> High
+        <input type="radio" formControlName="priority" value="Low"> Low
+        <input type="radio" formControlName="priority" value="Medium"> Medium
+        <input type="radio" formControlName="priority" value="High"> High
     </div>
 
 
     <div class="form-date">
         <div>Due date</div>
         <mat-form-field>
-            <input matInput placeholder="Select date" [matDatepicker]="datepicker">
+            <input formControlName="dueDate" matInput placeholder="Select date" [matDatepicker]="datepicker">
             <mat-datepicker #datepicker />
             <mat-datepicker-toggle [for]="datepicker" matSuffix />
+            <mat-error>Due date is required</mat-error>
         </mat-form-field>
     </div>
 
     <div class="form-actions">
-        <button mat-raised-button>Cancel</button>
-        <button mat-flat-button color="primary">Save Task</button>
+        <button mat-raised-button (click)="closeForm()">Cancel</button>
+        <button mat-flat-button color="primary" type="submit">Save Task</button>
     </div>
 </form>
