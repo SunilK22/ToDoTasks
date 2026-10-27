@@ -16,11 +16,19 @@
 .report-desc {
     font-size: 14px;
     color: #888;
+    padding: 10px 16px;
+
 }
 
 .report-title {
     font-size: 24px;
     font-weight: 500;
+    padding: 10px 16px;
+}
+
+
+.summary-grid-list {
+    padding: 10px;
 }
 
 .summary-content {
@@ -44,7 +52,7 @@
 
 .task-row {
     display: grid;
-    grid-template-columns: 40px 2fr 1fr 1fr 80px 40px;
+    grid-template-columns: 40px 2fr 0.5fr 0.5fr 80px 40px;
     align-items: center;
     padding: 10px 16px;
     background: white;
@@ -61,17 +69,16 @@
     font-size: 12px;
     color: #888;
 
-    
+
 }
 
 
 .table-filters {
-  display: flex;
-  gap: 10px;
-  padding: 12px 18px;
+    display: flex;
+    gap: 10px;
+    padding: 12px 18px;
 }
 
 .spacer {
-  flex: 1 1 auto; 
+    flex: 1 1 auto;
 }
-
