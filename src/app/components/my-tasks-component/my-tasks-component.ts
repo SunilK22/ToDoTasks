@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
-import { ITodoTask, TaskFilter } from '../../models/ToDoTaskModel';
+import { DateFilter, ITodoTask, TaskFilter } from '../../models/ToDoTaskModel';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateTaskComponent } from '../create-task-component/create-task-component';
@@ -32,6 +32,7 @@ export class MyTasksComponent implements OnInit {
 
   searchedTask = signal('');
   taskFilter = signal<TaskFilter>('all');
+  dateFilter = signal<DateFilter>('all');
 
   taskData = signal<ITodoTask[]>([]);
 
@@ -112,9 +113,20 @@ export class MyTasksComponent implements OnInit {
     this.taskFilter.set(filter);
   }
 
+  setDateFilter(filter: DateFilter) {
+    this.dateFilter.set(filter);
+  }
+
   getFilteredData(): ITodoTask[] {
     const inputData = this.searchedTask().trim().toLowerCase();
-    const filter = this.taskFilter;
+    const filter = this.taskFilter();
+    const dFilter = this.dateFilter();
+
+    const todayStr = new Date().toISOString().split('T')[0];
+
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = tomorrow.toISOString().split('T')[0];
 
     return this.taskData().filter(task => {
 
@@ -123,11 +135,27 @@ export class MyTasksComponent implements OnInit {
         task.description.toLowerCase().includes(inputData);
 
       const matchedStatus =
-        filter() === 'all' ||
-        (filter() === 'active' && !task.completed) ||
-        (filter() === 'completed' && task.completed);
+        filter === 'all' ||
+        (filter === 'active' && !task.completed) ||
+        (filter === 'completed' && task.completed);
 
-      return matchedData && matchedStatus;
+      const taskDateStr = new Date(task.dueDate).toISOString().split('T')[0];
+
+      const matchedDate =
+        dFilter === 'all' ||
+        (dFilter === 'today' && taskDateStr === todayStr) ||
+        (dFilter === 'upcoming' && taskDateStr >= tomorrowStr);
+
+      return matchedData && matchedStatus && matchedDate;
     });
   }
+
+  sortByDueDate() {
+    this.taskData.update(tasks =>
+      [...tasks].sort(
+        (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+      )
+    );
+  }
+
 }

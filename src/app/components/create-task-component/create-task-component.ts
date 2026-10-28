@@ -24,7 +24,7 @@ export class CreateTaskComponent implements OnInit {
   tasksFormGroup!: FormGroup;
   fb!: FormBuilder;
 
-  task:ITodoTask = inject(MAT_DIALOG_DATA);
+  task: ITodoTask = inject(MAT_DIALOG_DATA);
 
   taskCategory: IGroupType[] = [
     { icon: "person", title: "Personal" },
@@ -85,5 +85,5 @@ export class CreateTaskComponent implements OnInit {
   closeForm() {
     this.createTaskDialogRef.close();
   }
-  
+
 }

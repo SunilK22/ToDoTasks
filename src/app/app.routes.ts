@@ -8,10 +8,5 @@ export const routes: Routes = [
         path: '',
         component: NavigationComponent,
         title: 'My Tasks'
-    },
-    {
-        path: 'newtask',
-        component: CreateTaskComponent,
-        title: 'Create Task'
     }
 ];

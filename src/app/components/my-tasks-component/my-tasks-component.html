@@ -34,18 +34,17 @@
 </mat-grid-list>
 
 <div class="table-filters">
-<button mat-raised-button (click)="setTaskFilter('all')">All</button>
-<button mat-raised-button (click)="setTaskFilter('active')">Active</button>
-<button mat-raised-button (click)="setTaskFilter('completed')">Completed</button>
+    <button mat-raised-button (click)="setTaskFilter('all')">All</button>
+    <button mat-raised-button (click)="setTaskFilter('active')">Active</button>
+    <button mat-raised-button (click)="setTaskFilter('completed')">Completed</button>
 
     <span class="spacer"></span>
 
     <div class="search-container">
-        <input matInput [ngModel]="searchedTask()" (ngModelChange)="searchedTask.set($event)"
-            placeholder="Search tasks...">
+        <input matInput [(ngModel)]="searchedTask" placeholder="Search tasks...">
     </div>
 
-    <button mat-raised-button>
+    <button mat-raised-button (click)="sortByDueDate()">
         <mat-icon>sort</mat-icon>
         Sort by: Due date
     </button>
@@ -54,7 +53,7 @@
 
 
 
-@for (task of getFilteredData(); track task.id) {
+@for (task of getFilteredData(); track task.title) {
 <div class="task-row">
     <mat-checkbox [(ngModel)]="task.completed" (ngModelChange)="updateTask(task, $event)"></mat-checkbox>
 

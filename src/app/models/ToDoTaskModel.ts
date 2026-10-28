@@ -1,6 +1,7 @@
 export type TaskPriority = 'Low' | 'Medium' | 'High';
 export type TaskCategory = 'Personal' | 'Work' | 'Learning' | 'Shopping' | 'Other';
 export type TaskFilter = 'all' | 'active' | 'completed';
+export type DateFilter = 'all' | 'today' | 'upcoming';
 
 export interface ITodoTask {
     id: string;
@@ -8,11 +9,11 @@ export interface ITodoTask {
     description: string;
     category: TaskCategory;
     priority: TaskPriority;
-    dueDate: string;       
+    dueDate: string;
     completed: boolean;
 }
 
-export interface IGroupType{
+export interface IGroupType {
     icon: string;
     title: string;
 }

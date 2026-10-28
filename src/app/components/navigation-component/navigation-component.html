@@ -9,21 +9,21 @@
 </mat-toolbar>
 
 <mat-sidenav-container style="height: 100vh" class="example-sidenav-container">
-    <mat-sidenav #sidenav mode="side" [opened]="isOpened()">
+    <mat-sidenav #sidenav mode="side" [opened]="isOpened()" class="sidenav">
         <mat-nav-list>
-            <a mat-list-item>
+            <a mat-list-item (click)="myTasks.setDateFilter('all')">
                 <mat-icon>home</mat-icon>
                 My Tasks
             </a>
-            <a mat-list-item>
+            <a mat-list-item (click)="myTasks.setDateFilter('today')">
                 <mat-icon>calendar_today</mat-icon>
                 Today
             </a>
-            <a mat-list-item>
+            <a mat-list-item (click)="myTasks.setDateFilter('upcoming')">
                 <mat-icon>access_time</mat-icon>
                 Upcoming
             </a>
-            <a mat-list-item>
+            <a mat-list-item (click)="myTasks.setTaskFilter('completed')">
                 <mat-icon>check</mat-icon>
                 Completed
             </a>
@@ -31,6 +31,6 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-        <app-my-tasks-component></app-my-tasks-component>
+        <app-my-tasks-component #myTasks></app-my-tasks-component>
     </mat-sidenav-content>
 </mat-sidenav-container>
