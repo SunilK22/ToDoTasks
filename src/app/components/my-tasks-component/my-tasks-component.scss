@@ -68,15 +68,21 @@
 .task-desc {
     font-size: 12px;
     color: #888;
-
-
 }
 
 
 .table-filters {
     display: flex;
+    align-items: center;
     gap: 10px;
     padding: 12px 18px;
+}
+
+.search-container {
+    display: flex;
+    height: 30px;
+    padding: 10px 10px;
+
 }
 
 .spacer {

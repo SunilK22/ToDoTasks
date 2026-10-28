@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
-import { ITodoTask } from '../../models/ToDoTaskModel';
+import { ITodoTask, TaskFilter } from '../../models/ToDoTaskModel';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateTaskComponent } from '../create-task-component/create-task-component';
@@ -30,7 +30,10 @@ export class MyTasksComponent implements OnInit {
   inProgress = signal(0);
   completed = signal(0);
 
-  taskData: ITodoTask[] = [];
+  searchedTask = signal('');
+  taskFilter = signal<TaskFilter>('all');
+
+  taskData = signal<ITodoTask[]>([]);
 
   readonly dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
@@ -43,18 +46,19 @@ export class MyTasksComponent implements OnInit {
   }
 
   refreshTask() {
-    this.taskData = Object.keys(localStorage)
+    this.taskData.set(Object.keys(localStorage)
       .map(key => localStorage.getItem(key))
       .filter((value) => value !== null)
-      .map(value => JSON.parse(value) as ITodoTask);
+      .map(value => JSON.parse(value) as ITodoTask));
 
-    this.totalTasks.set(this.taskData.length);
+    this.totalTasks.set(this.taskData().length);
 
-    this.inProgress.set(this.taskData.filter((data) => data.completed !== true).length);
+    this.inProgress.set(this.taskData().filter((data) => data.completed !== true).length);
 
-    this.completed.set(this.taskData.filter((data) => data.completed === true).length);
+    this.completed.set(this.taskData().filter((data) => data.completed === true).length);
 
   }
+
 
   openAddTaskForm() {
     const dialogRef = this.dialog.open(CreateTaskComponent, {
@@ -66,6 +70,7 @@ export class MyTasksComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.refreshTask());
   }
+
 
   removeTask(key: ITodoTask) {
 
@@ -81,11 +86,48 @@ export class MyTasksComponent implements OnInit {
       });
   }
 
-  updateTaskCompletion(task: ITodoTask, completed: boolean): void {
+
+  updateTask(task: ITodoTask, completed: boolean = false): void {
     const updatedTask: ITodoTask = { ...task, completed };
 
     localStorage.setItem(updatedTask.id, JSON.stringify(updatedTask));
     this.refreshTask();
   }
 
+
+  editTask(task: ITodoTask) {
+    const dialogRef = this.dialog.open(CreateTaskComponent, {
+      maxWidth: '700px',
+      minWidth: '500px',
+      data: task
+    });
+
+
+    dialogRef.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.refreshTask());
+  }
+
+  setTaskFilter(filter: TaskFilter) {
+    this.taskFilter.set(filter);
+  }
+
+  getFilteredData(): ITodoTask[] {
+    const inputData = this.searchedTask().trim().toLowerCase();
+    const filter = this.taskFilter;
+
+    return this.taskData().filter(task => {
+
+      const matchedData =
+        task.title.toLowerCase().includes(inputData) ||
+        task.description.toLowerCase().includes(inputData);
+
+      const matchedStatus =
+        filter() === 'all' ||
+        (filter() === 'active' && !task.completed) ||
+        (filter() === 'completed' && task.completed);
+
+      return matchedData && matchedStatus;
+    });
+  }
 }

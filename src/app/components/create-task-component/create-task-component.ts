@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -9,7 +9,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 
 @Component({
@@ -24,7 +24,7 @@ export class CreateTaskComponent implements OnInit {
   tasksFormGroup!: FormGroup;
   fb!: FormBuilder;
 
-  readonly descValue = signal('');
+  task:ITodoTask = inject(MAT_DIALOG_DATA);
 
   taskCategory: IGroupType[] = [
     { icon: "person", title: "Personal" },
@@ -40,7 +40,7 @@ export class CreateTaskComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.tasksFormGroup = this.buildForm();
+    this.tasksFormGroup = this.buildForm(this.task);
   }
 
   buildForm(taskForm: ITodoTask | null = null): FormGroup {
@@ -65,7 +65,7 @@ export class CreateTaskComponent implements OnInit {
 
     let formData = this.tasksFormGroup.value;
     const data: ITodoTask = {
-      id: crypto.randomUUID(),
+      id: this.task?.id ?? crypto.randomUUID(),
       title: formData.title.trim(),
       description: formData.description.trim(),
       category: formData.category,
@@ -85,6 +85,5 @@ export class CreateTaskComponent implements OnInit {
   closeForm() {
     this.createTaskDialogRef.close();
   }
-
-
+  
 }

@@ -34,17 +34,15 @@
 </mat-grid-list>
 
 <div class="table-filters">
-    <button mat-raised-button>All</button>
-    <button mat-raised-button>Active</button>
-    <button mat-raised-button>Completed</button>
+<button mat-raised-button (click)="setTaskFilter('all')">All</button>
+<button mat-raised-button (click)="setTaskFilter('active')">Active</button>
+<button mat-raised-button (click)="setTaskFilter('completed')">Completed</button>
 
     <span class="spacer"></span>
 
     <div class="search-container">
-        <!-- <input matInput (keyup)="applyFilter($event)" placeholder="Search tasks..." #input> -->
-        <button mat-icon-button>
-            <mat-icon>search</mat-icon>
-        </button>
+        <input matInput [ngModel]="searchedTask()" (ngModelChange)="searchedTask.set($event)"
+            placeholder="Search tasks...">
     </div>
 
     <button mat-raised-button>
@@ -56,10 +54,9 @@
 
 
 
-@for (task of taskData; track task.id) {
+@for (task of getFilteredData(); track task.id) {
 <div class="task-row">
-    <mat-checkbox [(ngModel)]="task.completed" [checked]="task.completed"
-        (change)="updateTaskCompletion(task, task.completed)"></mat-checkbox>
+    <mat-checkbox [(ngModel)]="task.completed" (ngModelChange)="updateTask(task, $event)"></mat-checkbox>
 
     @if(task.completed){
     <span class="task-main-info">
@@ -86,7 +83,7 @@
             <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-            <button mat-menu-item>Edit</button>
+            <button mat-menu-item (click)="editTask(task)">Edit</button>
             <button mat-menu-item (click)="removeTask(task)">Delete</button>
         </mat-menu>
     </span>

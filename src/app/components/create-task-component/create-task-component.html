@@ -1,7 +1,7 @@
 <form (ngSubmit)="saveForm()" [formGroup]="tasksFormGroup" class="taskForm">
     <div class="formHeader">
         <span class="form-title">Create a task</span>
-        <button mat-icon-button (click)="closeForm()">
+        <button mat-icon-button type="button" (click)="closeForm()">
             <mat-icon>close</mat-icon>
         </button>
     </div>
@@ -19,8 +19,8 @@
         <div>Description</div>
         <mat-form-field hint-label="Max 500 characters">
             <textarea #input matInput formControlName="description" placeholder="Enter task description (optional)"
-                maxlength="500" [(ngModel)]="descValue"></textarea>
-            <mat-hint align="end">{{descValue().length}}/500</mat-hint>
+                maxlength="500"></textarea>
+            <mat-hint align="end">{{tasksFormGroup.get('description')?.value.length}}/500</mat-hint>
         </mat-form-field>
     </div>
 
@@ -59,7 +59,7 @@
     </div>
 
     <div class="form-actions">
-        <button mat-raised-button (click)="closeForm()">Cancel</button>
+        <button mat-raised-button type="button" (click)="closeForm()">Cancel</button>
         <button mat-flat-button color="primary" type="submit">Save Task</button>
     </div>
 </form>
