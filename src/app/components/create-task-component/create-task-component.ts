@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -46,6 +46,7 @@ export class CreateTaskComponent implements OnInit {
   buildForm(taskForm: ITodoTask | null = null): FormGroup {
 
     let newform = this.fb.group({
+      id: new FormControl(taskForm?.id ?? null),
       title: new FormControl(taskForm?.title ?? null, Validators.required),
       description: new FormControl(taskForm?.description ?? ''),
       category: new FormControl(taskForm?.category, Validators.required),
@@ -65,7 +66,7 @@ export class CreateTaskComponent implements OnInit {
 
     let formData = this.tasksFormGroup.value;
     const data: ITodoTask = {
-      id: this.task?.id ?? crypto.randomUUID(),
+      id: formData?.id ?? crypto.randomUUID(),
       title: formData.title.trim(),
       description: formData.description.trim(),
       category: formData.category,

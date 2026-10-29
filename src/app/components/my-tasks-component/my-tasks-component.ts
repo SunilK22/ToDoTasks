@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateTaskComponent } from '../create-task-component/create-task-component';
 import { ConfirmationDialogComponent } from '../confirmation-dialog-component/confirmation-dialog-component';
+import { filter } from 'rxjs';
 
 
 @Component({
@@ -38,7 +39,7 @@ export class MyTasksComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
-
+  isAscending = true;
 
   constructor() { }
 
@@ -63,8 +64,8 @@ export class MyTasksComponent implements OnInit {
 
   openAddTaskForm() {
     const dialogRef = this.dialog.open(CreateTaskComponent, {
-      maxWidth: '700px',
-      minWidth: '500px'
+      maxWidth: '100%',
+      minWidth: '35%'
     });
 
     dialogRef.afterClosed()
@@ -78,13 +79,12 @@ export class MyTasksComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent);
 
     dialogRef.afterClosed()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(confirmed => {
-        if (confirmed) {
-          localStorage.removeItem(key.id);
-          this.refreshTask();
-        }
-      });
+      .pipe(takeUntilDestroyed(this.destroyRef), filter(confirmed => confirmed === true))
+      .subscribe(() => {
+        localStorage.removeItem(key.id);
+        this.refreshTask();
+      }
+      );
   }
 
 
@@ -98,35 +98,44 @@ export class MyTasksComponent implements OnInit {
 
   editTask(task: ITodoTask) {
     const dialogRef = this.dialog.open(CreateTaskComponent, {
-      maxWidth: '700px',
-      minWidth: '500px',
+      maxWidth: '100%',
+      minWidth: '35%',
       data: task
     });
-
 
     dialogRef.afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.refreshTask());
   }
 
+
   setTaskFilter(filter: TaskFilter) {
     this.taskFilter.set(filter);
   }
 
+
   setDateFilter(filter: DateFilter) {
     this.dateFilter.set(filter);
   }
+
 
   getFilteredData(): ITodoTask[] {
     const inputData = this.searchedTask().trim().toLowerCase();
     const filter = this.taskFilter();
     const dFilter = this.dateFilter();
 
-    const todayStr = new Date().toISOString().split('T')[0];
+    const dateFormatter = new Intl.DateTimeFormat('en-CA', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+
+    const todayStr = dateFormatter.format(new Date());
 
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    const tomorrowStr = tomorrow.toISOString().split('T')[0];
+    const tomorrowStr = dateFormatter.format(tomorrow);
+
 
     return this.taskData().filter(task => {
 
@@ -139,23 +148,37 @@ export class MyTasksComponent implements OnInit {
         (filter === 'active' && !task.completed) ||
         (filter === 'completed' && task.completed);
 
-      const taskDateStr = new Date(task.dueDate).toISOString().split('T')[0];
+      const taskDateStr = dateFormatter.format(new Date(task.dueDate));
 
       const matchedDate =
         dFilter === 'all' ||
         (dFilter === 'today' && taskDateStr === todayStr) ||
-        (dFilter === 'upcoming' && taskDateStr >= tomorrowStr);
+        (dFilter === 'upcoming' && taskDateStr >= tomorrowStr && !task.completed);
 
       return matchedData && matchedStatus && matchedDate;
     });
   }
 
+
   sortByDueDate() {
-    this.taskData.update(tasks =>
-      [...tasks].sort(
-        (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
-      )
-    );
+    this.taskData.update(tasks => {
+      const sortedTasks = [...tasks];
+
+      sortedTasks.sort((a, b) => {
+        const dateA = new Date(a.dueDate).getTime();
+        const dateB = new Date(b.dueDate).getTime();
+
+        if (this.isAscending) {
+          return dateA - dateB;
+        } else {
+          return dateB - dateA;
+        }
+      });
+
+      return sortedTasks;
+    });
+
+    this.isAscending = !this.isAscending;
   }
 
 }

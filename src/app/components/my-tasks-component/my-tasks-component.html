@@ -55,7 +55,7 @@
 
 @for (task of getFilteredData(); track task.title) {
 <div class="task-row">
-    <mat-checkbox [(ngModel)]="task.completed" (ngModelChange)="updateTask(task, $event)"></mat-checkbox>
+    <mat-checkbox [ngModel]="task.completed" (ngModelChange)="updateTask(task, $event)"></mat-checkbox>
 
     @if(task.completed){
     <span class="task-main-info">
